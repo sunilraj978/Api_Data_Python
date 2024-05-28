@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+  <a style="color:white;font-weight:bold" class="navbar-brand" href="#">Breaking Bads</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a style="color:white" class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a style="color:white" class="nav-link" href="/filter">Filter</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+ <main role="main" class="container">
+<br/><br/>
+      <h3>Filter Data</h3>
+      <form id="myform">
+          {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-12">
+                <div class="input-group">
+                    <input class="form-control py-2 border-right-0 border" id="title_contains" type="search" name="title_contains" placeholder="Title contains..." />
+                    <span class="input-group-append">
+                        <div class="input-group-text bg-transparent">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    <div style="display:flex; flex-wrap:wrap">
+    {% for i in queryset %}
+
+<div style="display:flex; flex-direction:row; padding:20px">
+    <img src="{{i.img}}" style="width: 250px" />
+    <div style="padding:10px">
+        Name: {{i.name}} <br/>
+        DOB:{{i.birthday}}<br/>
+    Occupation: {{i.occupation}}<br/>
+        Status:{{i.status}}<br/>
+        NickName:{{i.nickname}}<br/>
+        Portrayed:{{i.portrayed}}
+    </div>
+</div>
+
+{% endfor %}
+</div>
+     <script type="text/javascript">
+  $(document).on('submit','#myform',function(e){
+    e.preventDefault();
+
+    $.ajax({
+      type:'GET',
+      url:'/filter',
+      data:{
+        title_contains:$('#title_contains').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+        $('h2').html("localhost:8000/"+data)
+      }
+    });
+  });
+</script>
+</body>
+</html>
